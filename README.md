@@ -3,7 +3,7 @@
 ## Fluig
 
 1. Busca ML com base no numero do documento do formulario no fluig
-   ```sql
+```sql
    SELECT 
     NR_DOCUMENTO,
   COD_EMPRESA,
@@ -17,4 +17,4 @@ FROM
 WHERE 
     NR_DOCUMENTO = 3430705
     AND COD_LISTA IS NOT NULL
-   ```
+```
