@@ -10,7 +10,7 @@
   COD_LISTA,
     CONCAT('ML', 
         LPAD(COD_EMPRESA, 3, '0'), 
-        LPAD(COD_LISTA, 3, '0')
+        COD_LISTA
     ) AS 'Nome da Tabela ML'
 FROM 
     DOCUMENTO
