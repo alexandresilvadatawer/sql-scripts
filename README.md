@@ -2,7 +2,7 @@
 
 ## Fluig
 
-1. Busca ML com base no numero do documento do formulario no fluig
+### Busca ML do formulario no fluig
 ```sql
    SELECT 
     NR_DOCUMENTO,
@@ -18,7 +18,7 @@ WHERE
     NR_DOCUMENTO = 3430705
     AND COD_LISTA IS NOT NULL
 ```
-1. inner join com a tabela DOCUMENTO para buscar os registros ativos da ML
+### Inner join com a tabela DOCUMENTO
 ```sql
 INNER JOIN DOCUMENTO DOC
     ON DOC.NUM_DOCTO_PROPRIED = ML.CARDID
