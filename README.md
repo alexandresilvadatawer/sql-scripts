@@ -28,3 +28,37 @@ INNER JOIN DOCUMENTO DOC
    AND DOC.TP_DOCUMENTO = '5'
    AND DOC.COD_LISTA = 32
 ```
+
+### Dataset Libera novo campo do formulario
+Atualiza os formularios para a versao específica
+```javascript
+function createDataset(fields, constraints, sortFields) {
+    var dataSource = "java:/jdbc/FluigDS"; // DataSource padrão do Fluig
+    var conn = null;
+    var stmt = null;
+    
+    try {
+        var connectionService = javax.naming.InitialContext.doLookup(dataSource);
+        conn = connectionService.getConnection();
+        
+        var sql = `\n\n
+            UPDATE DOCUMENTO 
+                SET NUM_VERS_PROPRIED = versaoAtual
+                
+            WHERE 
+                VERSAO_ATIVA = 1        
+                AND NUM_DOCTO_PROPRIED = parentId
+                
+            `;
+        stmt = conn.prepareStatement(sql);
+        stmt.executeUpdate();
+    } catch (e) {
+        log.error("Erro ao atualizar campo: " + e);
+    } finally {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+    }
+    return null;
+}
+
+```
