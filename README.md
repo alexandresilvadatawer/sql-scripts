@@ -18,6 +18,7 @@ WHERE
     NR_DOCUMENTO = 3430705
     AND COD_LISTA IS NOT NULL
 ```
+
 ### Inner join com a tabela DOCUMENTO
 ```sql
 INNER JOIN DOCUMENTO DOC
@@ -60,5 +61,61 @@ function createDataset(fields, constraints, sortFields) {
     }
     return null;
 }
+```
 
+## Dataset de SQL Update, Insert, Delete
+```javascript
+function createDataset ( fields, constraints, sortFields) {
+	try {
+		var minhaQuery = fields[0];
+		var dataSource = fields[1];
+		
+		var newDataset = DatasetBuilder.newDataset();
+		var ic = new javax.naming.InitialContext();
+		var ds = ic.lookup(dataSource);
+		var created = false;
+		
+		var conn = ds.getConnection();
+		var stmt = conn.createStatement();
+		
+		//if(/INSERT INTO/i.test(minhaQuery) || /UPDATE/i.test(minhaQuery) || /DELETE/i.test(minhaQuery)){
+		
+		var rs = stmt.execute(minhaQuery);
+		
+		newDataset.addColumn("RESULTADO");
+		newDataset.addColumn("MENSAGEM");
+		newDataset.addRow(new Array("OK", "Registro inserido alterado excluido com sucesso."));
+	
+	} catch(e) {
+		var newDataset = DatasetBuilder.newDataset();
+		newDataset.addColumn("ERRO");
+		newDataset.addRow(new Array(e.toString()));
+		
+	} finally {
+		if ( stmt != null && stmt != undefined ) stmt.close();
+		if ( conn != null && conn != undefined ) conn.close();
+	}
+	
+	return newDataset;
+}
+
+// EXEMPLO DE USO
+{
+    var sql= `\n\n
+   
+UPDATE TAR_PROCES AS TP
+
+INNER JOIN PROCES_WORKFLOW AS PW
+    ON PW.NUM_PROCES = TP.NUM_PROCES
+	
+SET
+    TP.LOG_ATIV = 0
+	
+WHERE 
+	1 = 1
+	AND TP.LOG_ATIV = 1
+	AND PW.NUM_PROCES IN (17341,41230,542335,910944)
+    `;
+    var ds = DatasetFactory.getDataset("ds_dw_Sql_Update", new Array(sql, "java:/jdbc/AppDS"), null, null);
+}
 ```
